@@ -12,7 +12,7 @@ const LogInScreen = ({ navigation }) => {
             />
             <Input title='Email' />
             <Input title='Password' isPassword={true}/>
-            <Button text="Login" />
+            <Button text="Login" navigation={navigation}/>
             <View style={styles.newUser}>
                 <Text style={{fontSize: 16}}>New user? </Text>
                 <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
