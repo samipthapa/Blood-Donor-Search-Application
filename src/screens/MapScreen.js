@@ -1,25 +1,51 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import MapView from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import { Marker, Circle } from 'react-native-maps';
+import { StyleSheet, View, Dimensions, Text, Pressable } from 'react-native';
+import * as Location from 'expo-location';
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width/height;
 const LATITUDE_DELTA = 0.02;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-const INITIAL_POSITION = {
-  latitude: 27.716455440397244,
-  longitude: 85.3525457296956,
-  latitudeDelta: LATITUDE_DELTA,
-  longitudeDelta: LONGITUDE_DELTA,
-};
 
 const Map = () => {
+  const [location, setLocation] = useState({
+    latitude: 0,
+    longitude: 0,
+    latitudeDelta: LATITUDE_DELTA,
+    longitudeDelta: LONGITUDE_DELTA
+  });
+
+  useEffect(() => {
+    (async () => {
+
+      let {status} = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.log('Permission not granted')
+      }
+
+      const position = await Location.getCurrentPositionAsync();
+      setLocation(prev => ({
+        ...prev,
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      }))
+    })();
+  }, [])
+  
   return (
     <View style={styles.container}>
-      <MapView 
+      {/* {console.log(location)} */}
+      <MapView
         style={styles.map}
-        initialRegion={INITIAL_POSITION}
-      />
+        center={location}
+        showsUserLocation={true}
+        followsUserLocation={true}
+      >
+        <Marker coordinate={location} />
+        <Circle center={location} radius={500} />
+      </MapView>
     </View>
   );
 }
