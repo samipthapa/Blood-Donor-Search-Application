@@ -10,12 +10,7 @@ const LATITUDE_DELTA = 0.02;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const Map = () => {
-  const [location, setLocation] = useState({
-    latitude: 0,
-    longitude: 0,
-    latitudeDelta: LATITUDE_DELTA,
-    longitudeDelta: LONGITUDE_DELTA
-  });
+  const [location, setLocation] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -26,24 +21,38 @@ const Map = () => {
       }
 
       const position = await Location.getCurrentPositionAsync();
-      setLocation(prev => ({
-        ...prev,
+      setLocation({
         latitude: position.coords.latitude,
-        longitude: position.coords.longitude
-      }))
+        longitude: position.coords.longitude,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA
+      })
     })();
   }, [])
+
+  if (!location) {
+    return null;
+  }
   
   return (
     <View style={styles.container}>
-      {/* {console.log(location)} */}
       <MapView
         style={styles.map}
-        center={location}
+        region={location}
         showsUserLocation={true}
         followsUserLocation={true}
       >
-        <Marker coordinate={location} />
+        <Marker 
+          coordinate={location} 
+          draggable
+          onDragEnd={({nativeEvent}) => {
+            setLocation(prev => ({
+              ...prev,
+              latitude: nativeEvent.coordinate.latitude,
+              longitude: nativeEvent.coordinate.longitude
+            }))
+          }}
+        />
         <Circle center={location} radius={500} />
       </MapView>
     </View>
