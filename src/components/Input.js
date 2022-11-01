@@ -3,7 +3,7 @@ import { Text, TextInput, StyleSheet, View } from 'react-native';
 
 const Input = ({ title, isPassword }) => {
     return (
-        <View>
+        <View style={title=="Phone" ? {flex:0.95, height: 60} : null}>
             <Text style={styles.textStyle}>{title}</Text>
             <TextInput
                 autoCapitalize="none"
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     },
     textStyle: {
         color: 'rgb(105,105,105)',
-    }
+    },
 });
 
 export default Input;

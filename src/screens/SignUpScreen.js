@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Text, StyleSheet, View, TextInput, TouchableOpacity } from 'react-native';
 import Button from '../components/Button';
 import Input from '../components/Input';
+import DropdownComponent from '../components/Dropdown';
 
 const SignUpScreen = ({ navigation }) => {
     return (
@@ -12,7 +13,10 @@ const SignUpScreen = ({ navigation }) => {
             </View>
             <Input title='Full Name' />
             <Input title='Email' />
-            <Input title='Phone' />
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}> 
+                <Input title='Phone'/>
+                <DropdownComponent />
+            </View>
             <Input title='Password' isPassword={true}/>
             <Input title='Confirm Password' isPassword={true}/>
             <Button text="Sign Up" />
