@@ -1,9 +1,9 @@
 import React from 'react';
 import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 
-const Button = ({ text, navigation }) => {
+const Button = ({ text, navigation, onSubmit }) => {
     return (
-        <TouchableOpacity style={styles.buttonStyle} onPress={() => navigation.navigate('Map')}>
+        <TouchableOpacity style={styles.buttonStyle} onPress={onSubmit}>
             <Text style={styles.buttonText}>{text}</Text>
         </TouchableOpacity>
     );

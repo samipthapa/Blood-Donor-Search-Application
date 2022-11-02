@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, TextInput, StyleSheet, View } from 'react-native';
 
-const Input = ({ title, isPassword }) => {
+const Input = ({ title, isPassword, onChange, state }) => {
     return (
         <View style={title=="Phone" ? {flex:0.95, height: 60} : null}>
             <Text style={styles.textStyle}>{title}</Text>
@@ -10,6 +10,8 @@ const Input = ({ title, isPassword }) => {
                 autoCorrect={false}
                 style={styles.inputStyle}
                 secureTextEntry={isPassword}
+                value={state}
+                onChangeText={value => onChange(value)}
             />
         </View>
     );
