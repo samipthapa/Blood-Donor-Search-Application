@@ -5,6 +5,8 @@ import Input from '../components/Input';
 import DropdownComponent from '../components/Dropdown';
 import { database } from '../../firebase';
 import { collection, addDoc } from 'firebase/firestore';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from "../../firebase";
 
 const SignUpScreen = ({ navigation }) => {
     const [data, setData] = useState({
@@ -19,7 +21,14 @@ const SignUpScreen = ({ navigation }) => {
 
     const handleSignUp = () => {
         addDoc(collectionRef, data)
-            .then(() => console.log('Data added'))
+            .then(() => {
+                console.log('Data Added')
+                createUserWithEmailAndPassword(auth, data.email, data.password)
+                    .then(userCredential => {
+                        console.log("User created with: " + userCredential.user.email);
+                    })
+                    .catch(err => console.log(err.message)) 
+            })
             .catch((err) => console.log(err.message))
     }
 
