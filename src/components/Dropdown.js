@@ -15,8 +15,7 @@ const data = [
 { label: '-', value: '8' },
 ];
 
-const DropdownComponent = () => {
-const [value, setValue] = useState(null);
+const DropdownComponent = ({ state, onChangeValue }) => {
 
 return (
     <View style={styles.container}>
@@ -28,11 +27,9 @@ return (
         maxHeight={300}
         labelField="label"
         valueField="value"
-        placeholder='...'
-        value={value}
-        onChange={item => {
-        setValue(item.value);
-        }}
+        placeholder={state ? state : '...'}
+        value={state}
+        onChange={item => onChangeValue(item.label)}
         renderLeftIcon={() => (
         <Fontisto 
             style={styles.icon}

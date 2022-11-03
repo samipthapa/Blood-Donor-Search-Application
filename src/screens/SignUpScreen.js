@@ -1,25 +1,76 @@
 import React, { useState } from 'react';
-import { Text, StyleSheet, View, TextInput, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import DropdownComponent from '../components/Dropdown';
+import { database } from '../../firebase';
+import { collection, addDoc } from 'firebase/firestore';
 
 const SignUpScreen = ({ navigation }) => {
+    const [data, setData] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        password: '',
+        confirmPassword: '',
+        bloodGroup: ''
+    });
+    const collectionRef = collection(database, 'users');
+
+    const handleSignUp = () => {
+        addDoc(collectionRef, data)
+            .then(() => console.log('Data added'))
+            .catch((err) => console.log(err.message))
+    }
+
     return (
         <View style={styles.container}>
             <View style={{marginBottom: '16%'}}>
                 <Text>looks like you're new here.</Text>
                 <Text style={styles.header}>Sign Up Now</Text> 
             </View>
-            <Input title='Full Name' />
-            <Input title='Email' />
+
+            <Input 
+                title='Full Name' 
+                state={data.name}
+                onChange={value => {setData(prev => ({...prev, name: value}))}}
+            />
+
+            <Input 
+                title='Email'
+                state={data.email}
+                onChange={value => {setData(prev => ({...prev, email: value}))}}
+            />
+
             <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}> 
-                <Input title='Phone'/>
-                <DropdownComponent />
+                <Input 
+                    title='Phone'
+                    state={data.phone}
+                    onChange={value => {setData(prev => ({...prev, phone: value}))}}
+                />
+                <DropdownComponent 
+                    state={data.bloodGroup}
+                    onChangeValue={value => {setData(prev => ({...prev, bloodGroup: value}))}}
+                />
             </View>
-            <Input title='Password' isPassword={true}/>
-            <Input title='Confirm Password' isPassword={true}/>
-            <Button text="Sign Up" />
+
+            <Input 
+                title='Password' 
+                isPassword={true}
+                state={data.password}
+                onChange={value => {setData(prev => ({...prev, password: value}))}}
+            />
+
+            <Input 
+                title='Confirm Password' 
+                isPassword={true}
+                state={data.confirmPassword}
+                onChange={value => {setData(prev => ({...prev, confirmPassword: value}))}}
+            />
+            <Button 
+                text="Sign Up" 
+                onSubmit={handleSignUp}
+            />
             <View style={styles.newUser}>
                 <Text style={{fontSize: 16}}>Already have an account? </Text>
                 <TouchableOpacity onPress={() => navigation.navigate('Login')}>
