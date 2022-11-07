@@ -50,7 +50,7 @@ const LogInScreen = ({ navigation }) => {
 
             <View style={styles.newUser}>
                 <Text style={{fontSize: 16}}>New user? </Text>
-                <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+                <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
                     <Text style={styles.signUp}>Sign Up</Text>
                 </TouchableOpacity>
             </View>

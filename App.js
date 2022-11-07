@@ -1,23 +1,61 @@
-import { createAppContainer } from "react-navigation";
-import { createStackNavigator } from "react-navigation-stack";
-import LogInScreen from "./src/screens/LogInScreen";
-import SignUpScreen from "./src/screens/SignUpScreen";
-import MapScreen from "./src/screens/MapScreen";
-import ProfileScreen from "./src/screens/ProfileScreen";
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from "@react-navigation/stack";
+import { Ionicons } from '@expo/vector-icons';
+import HomeScreen from './src/screens/HomeScreen';
+import ProfileScreen from './src/screens/ProfileScreen';
+import SignUpScreen from './src/screens/SignUpScreen';
+import LogInScreen from './src/screens/LogInScreen';
+import 'react-native-gesture-handler';
 
-const navigator = createStackNavigator(
-  {
-    Login: LogInScreen,
-    Signup: SignUpScreen,
-    Map: MapScreen,
-    Profile: ProfileScreen,
-  },
-  {
-    initialRouteName: 'Login',
-    defaultNavigationOptions: {
-      headerShown: false
-    }
-  }
-);
+const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
-export default createAppContainer(navigator);
+const BottomTab = () => {
+  return (
+    <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size}) => {
+              let iconName;
+              let rn = route.name;
+    
+              if (rn === 'Home') {
+                iconName = focused ? 'home' : 'home-outline'
+              } else if (rn === 'Profile') {
+                iconName = focused ? 'ios-person' : 'ios-person-outline'
+              }
+              return <Ionicons name={iconName} size={size} color={color} />
+          },
+          headerShown: false,
+        })}
+        initialRouteName={HomeScreen}
+      >
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Profile" component={ProfileScreen} />
+    </Tab.Navigator>
+  )
+}
+
+const MyStack = () => {
+  return (
+    <Stack.Navigator
+        initialRouteName='Login'
+        screenOptions={{
+          headerShown: false
+        }}
+      >
+        <Stack.Screen name="Login" component={LogInScreen} />
+        <Stack.Screen name="SignUp" component={SignUpScreen} />
+      </Stack.Navigator>
+  )
+}
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <MyStack />
+      {/* <BottomTab /> */}
+    </NavigationContainer>
+  );
+}

@@ -1,10 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import AccountInfo from '../components/AccountInfo';
-import { AntDesign } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
-import { Fontisto } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons';
+import { AntDesign, Ionicons, Fontisto, Entypo } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
 const ProfileScreen = ({ navigation }) => {
@@ -13,19 +10,11 @@ const ProfileScreen = ({ navigation }) => {
             <LinearGradient 
                 style={styles.header}
                 colors={["#ee0979", "#ff6a00"]}>
-                    <TouchableOpacity onPress={() => navigation.navigate('Map')}>
-                        <Ionicons 
-                            style={styles.backIcon} 
-                            name="arrow-back" 
-                            size={30} 
-                            color="white" 
-                        />
-                    </TouchableOpacity>
 
-                    <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 20}}>
+                    <View>
                         <Image style={styles.imageStyle}source={require('../../assets/Avatar.png')}/>
                         <Text style={styles.headerText}>Samip Bikram Thapa</Text>
-                        <Text style={{color: 'white', fontSize: 16}}>samipthapa99@gmail.com</Text>
+                        <Text style={{color: 'white', fontSize: 16, alignSelf: 'center'}}>samipthapa99@gmail.com</Text>
                     </View>
             </LinearGradient>
 
@@ -62,15 +51,16 @@ const ProfileScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         height: '100%',
-        backgroundColor: 'white'
     },
     header: {
         height: '40%',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     headerText: {
         color: 'white',
         fontSize: 24,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
     body: {
         padding: 30,
@@ -82,11 +72,13 @@ const styles = StyleSheet.create({
     },
     icon: {
         marginHorizontal: 5,
-        width: 35
+        width: 35,
+        textAlign: 'center'
     },
     imageStyle: {
         width: 96,
         height: 96,
+        alignSelf: 'center'
     },
     backIcon: {
         marginLeft: 10,
