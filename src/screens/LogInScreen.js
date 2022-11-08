@@ -16,9 +16,10 @@ const LogInScreen = ({ navigation }) => {
         signInWithEmailAndPassword(auth, email, password)
             .then(userCredential => {
                 const user = userCredential.user;
-                console.log("Logged in with: " + user.email);
+                console.log(`Logged in with: ${user.email}`);
                 setUser({
                     loggedIn: true,
+                    uid: user.uid,
                 })
             })
             .catch(error => {

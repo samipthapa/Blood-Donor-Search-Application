@@ -20,16 +20,16 @@ const SignUpScreen = ({ navigation }) => {
     const collectionRef = collection(database, 'users');
 
     const handleSignUp = () => {
-        addDoc(collectionRef, data)
-            .then(() => {
-                console.log('Data Added');
-                createUserWithEmailAndPassword(auth, data.email, data.password)
-                    .then(userCredential => {
-                        console.log("User created with: " + userCredential.user.email);
-                    })
-                    .catch(err => console.log(err.message)) 
+        createUserWithEmailAndPassword(auth, data.email, data.password)
+            .then(userCredential => {
+                const user = userCredential.user;
+                console.log("User created with: " + user.email);
+
+                addDoc(collectionRef, {...data, uid: user.uid})
+                    .then(() => console.log('Data Added'))
+                    .catch(err => console.log(err.message))
             })
-            .catch((err) => console.log(err.message))
+            .catch(err => console.log(err.message));
     }
 
     return (

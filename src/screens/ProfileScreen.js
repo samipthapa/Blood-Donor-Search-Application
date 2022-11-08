@@ -1,10 +1,29 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import AccountInfo from '../components/AccountInfo';
-import { AntDesign, Ionicons, Fontisto, Entypo } from '@expo/vector-icons';
+import { AntDesign, Ionicons, Fontisto, Entypo, MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import AppContext from '../context/AppContext';
+import { query, where, collection, onSnapshot } from 'firebase/firestore';
+import { database } from '../../firebase';
 
 const ProfileScreen = () => {
+    const [data, setData] = useState(null);
+    const {user, setUser} = useContext(AppContext);
+
+    const collectionRef = collection(database, 'users');
+
+   const userQuery = query(collectionRef, where("uid", "==", user.uid));
+
+   onSnapshot(userQuery, (data) => {
+    const dataArr =data.docs.map((item) => {
+        return item.data();
+    })
+    setData(dataArr[0]);
+   })
+
+   if(!data) return null;
+
     return (
         <View style={styles.container}>
             <LinearGradient 
@@ -13,8 +32,8 @@ const ProfileScreen = () => {
 
                     <View>
                         <Image style={styles.imageStyle}source={require('../../assets/Avatar.png')}/>
-                        <Text style={styles.headerText}>Samip Bikram Thapa</Text>
-                        <Text style={{color: 'white', fontSize: 16, alignSelf: 'center'}}>samipthapa99@gmail.com</Text>
+                        <Text style={styles.headerText}>{data.name}</Text>
+                        <Text style={{color: 'white', alignSelf: 'center'}}>{data.email}</Text>
                     </View>
             </LinearGradient>
 
@@ -23,26 +42,36 @@ const ProfileScreen = () => {
                 <AccountInfo 
                     icon={<Ionicons style={styles.icon} name="person" size={35} color="black" />}
                     heading="Name"
-                    subheading="Samip Bikram Thapa"
+                    subheading={data.name}
                 />
 
                 <AccountInfo
                     icon={<AntDesign style={styles.icon} name="mobile1" size={35} color="black" />}
                     heading="Mobile"
-                    subheading="9844054821"
+                    subheading={data.phone}
                 />
 
                 <AccountInfo
                     icon={<Fontisto style={styles.icon} name="blood-drop" size={35} color="black" />}
                     heading="Blood Group"
-                    subheading="AB+"
+                    subheading={data.bloodGroup}
                 />
 
                 <AccountInfo
                     icon={<Entypo style={styles.icon} name="mail" size={35} color="black" />}
                     heading="Email"
-                    subheading="samipthapa99@gmail.com"
+                    subheading={data.email}
                 />
+
+                <TouchableOpacity
+                    style={styles.logout}
+                    onPress={() => {
+                        setUser({loggedIn: false})
+                    }}
+                >
+                    <AntDesign name="logout" size={25} color="white" style={{marginHorizontal: 4}}/>
+                    <Text style={{color: 'white', fontSize: 17, fontWeight: 'bold'}}>Logout</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -53,13 +82,13 @@ const styles = StyleSheet.create({
         height: '100%',
     },
     header: {
-        height: '40%',
+        height: '35%',
         justifyContent: 'center',
         alignItems: 'center'
     },
     headerText: {
         color: 'white',
-        fontSize: 24,
+        fontSize: 22,
         fontWeight: 'bold',
     },
     body: {
@@ -76,13 +105,23 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     imageStyle: {
-        width: 96,
-        height: 96,
+        width: 90,
+        height: 90,
         alignSelf: 'center'
     },
     backIcon: {
         marginLeft: 10,
         marginTop: 30
+    },
+    logout: {
+        flexDirection: 'row',
+        backgroundColor: 'rgb(219,63,64)',
+        width: '35%',
+        padding: 7,
+        borderRadius: 20,
+        marginTop: 10,
+        marginLeft: 'auto',
+        alignItems: 'center'
     }
 });
 
