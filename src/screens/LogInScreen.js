@@ -1,20 +1,25 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useState} from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import Button from "../components/Button";
 import Input from "../components/Input";
 import { auth } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import AppContext from "../context/AppContext";
 
 const LogInScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const { user, setUser } = useContext(AppContext);
 
     const handleLogin = () => {
         signInWithEmailAndPassword(auth, email, password)
             .then(userCredential => {
                 const user = userCredential.user;
                 console.log("Logged in with: " + user.email);
-                navigation.navigate('Map');
+                setUser({
+                    loggedIn: true,
+                })
             })
             .catch(error => {
                 const errorMessage = error.message;

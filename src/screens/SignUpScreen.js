@@ -22,7 +22,7 @@ const SignUpScreen = ({ navigation }) => {
     const handleSignUp = () => {
         addDoc(collectionRef, data)
             .then(() => {
-                console.log('Data Added')
+                console.log('Data Added');
                 createUserWithEmailAndPassword(auth, data.email, data.password)
                     .then(userCredential => {
                         console.log("User created with: " + userCredential.user.email);

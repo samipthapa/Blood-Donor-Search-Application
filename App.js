@@ -8,6 +8,7 @@ import ProfileScreen from './src/screens/ProfileScreen';
 import SignUpScreen from './src/screens/SignUpScreen';
 import LogInScreen from './src/screens/LogInScreen';
 import 'react-native-gesture-handler';
+import AppContext from './src/context/AppContext';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -52,10 +53,15 @@ const MyStack = () => {
 }
 
 export default function App() {
+  const [user, setUser] = React.useState({
+    loggedIn: false
+  });
+  const state = {user, setUser};
   return (
-    <NavigationContainer>
-      <MyStack />
-      {/* <BottomTab /> */}
-    </NavigationContainer>
+    <AppContext.Provider value={state}>
+        <NavigationContainer>
+            {!user.loggedIn ? <MyStack /> : <BottomTab />}
+        </NavigationContainer>
+    </AppContext.Provider>
   );
 }

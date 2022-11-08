@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import AccountInfo from '../components/AccountInfo';
 import { AntDesign, Ionicons, Fontisto, Entypo } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const ProfileScreen = ({ navigation }) => {
+const ProfileScreen = () => {
     return (
         <View style={styles.container}>
             <LinearGradient 
