@@ -7,6 +7,7 @@ import HomeScreen from './src/screens/HomeScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import SignUpScreen from './src/screens/SignUpScreen';
 import LogInScreen from './src/screens/LogInScreen';
+import RequestScreen from './src/screens/RequestScreen';
 import 'react-native-gesture-handler';
 import AppContext from './src/context/AppContext';
 
@@ -16,6 +17,7 @@ const Stack = createStackNavigator();
 const BottomTab = () => {
   return (
     <Tab.Navigator
+        sceneContainerStyle={{ backgroundColor: 'white' }}
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size}) => {
               let iconName;
@@ -25,6 +27,8 @@ const BottomTab = () => {
                 iconName = focused ? 'home' : 'home-outline'
               } else if (rn === 'Profile') {
                 iconName = focused ? 'ios-person' : 'ios-person-outline'
+              } else if (rn === 'Request Blood') {
+                iconName = focused ? 'water' : 'water-outline'
               }
               return <Ionicons name={iconName} size={size} color={color} />
           },
@@ -33,6 +37,7 @@ const BottomTab = () => {
         initialRouteName={HomeScreen}
       >
         <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Request Blood" component={RequestScreen} />
         <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   )
@@ -43,7 +48,8 @@ const MyStack = () => {
     <Stack.Navigator
         initialRouteName='Login'
         screenOptions={{
-          headerShown: false
+          headerShown: false,
+          cardStyle: { backgroundColor: '#FFFFFF' },
         }}
       >
         <Stack.Screen name="Login" component={LogInScreen} />

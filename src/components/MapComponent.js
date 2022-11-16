@@ -1,13 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import MapView from 'react-native-maps';
 import { Marker, Circle } from 'react-native-maps';
-import { StyleSheet, View, Dimensions, Text, Pressable } from 'react-native';
+import { StyleSheet, View, Dimensions } from 'react-native';
 import * as Location from 'expo-location';
+import * as TaskManager from 'expo-task-manager';
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width/height;
 const LATITUDE_DELTA = 0.02;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+
+const LOCATION_TASK_NAME = "LOCATION_TASK_NAME"
+
+TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
+  if (error) {
+      console.log('LOCATION_TRACKING task ERROR:', error);
+      return;
+  }
+  if (data) {
+      const { locations } = data;
+      let lat = locations[0].coords.latitude;
+      let long = locations[0].coords.longitude;
+console.log(
+          `${new Date(Date.now()).toLocaleString()}: ${lat},${long}`
+      );
+  }
+});
 
 const Map = () => {
   const [location, setLocation] = useState(null);
@@ -15,10 +33,8 @@ const Map = () => {
   useEffect(() => {
     (async () => {
 
-      let {status} = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        console.log('Permission not granted')
-      }
+      const foreground = await Location.requestForegroundPermissionsAsync()
+      if (foreground.granted) await Location.requestBackgroundPermissionsAsync()
 
       const position = await Location.getCurrentPositionAsync();
       setLocation({
@@ -27,8 +43,15 @@ const Map = () => {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
       })
+
+      await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
+        accuracy: Location.Accuracy.Highest,
+        timeInterval: 10000,
+        distanceInterval: 0
+      })
     })();
   }, [])
+
 
   if (!location) {
     return null;

@@ -4,43 +4,42 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { Fontisto } from '@expo/vector-icons'; 
 
 const data = [
-{ label: 'A+', value: '1' },
-{ label: 'A-', value: '2' },
-{ label: 'B+', value: '3' },
-{ label: 'B-', value: '4' },
-{ label: 'AB+', value: '5' },
-{ label: 'AB-', value: '6' },
-{ label: 'O+', value: '7' },
-{ label: 'O-', value: '8' },
-{ label: '-', value: '8' },
+    { label: 'A+', value: '1' },
+    { label: 'A-', value: '2' },
+    { label: 'B+', value: '3' },
+    { label: 'B-', value: '4' },
+    { label: 'AB+', value: '5' },
+    { label: 'AB-', value: '6' },
+    { label: 'O+', value: '7' },
+    { label: 'O-', value: '8' },
+    { label: '-', value: '8' }
 ];
 
-const DropdownComponent = ({ state, onChangeValue }) => {
-
-return (
-    <View style={styles.container}>
-    <Text style={{color: 'rgb(105,105,105)',}}>Blood Group</Text>
-    <Dropdown
-        style={styles.dropdown}
-        iconStyle={styles.iconStyle}
-        data={data}
-        maxHeight={300}
-        labelField="label"
-        valueField="value"
-        placeholder={state ? state : '...'}
-        value={state}
-        onChange={item => onChangeValue(item.label)}
-        renderLeftIcon={() => (
-        <Fontisto 
-            style={styles.icon}
-            name="blood-drop" 
-            size={24}
-            color="red"
+const DropdownComponent = ({ state, onChangeValue, myData, style1, style2 }) => {
+    return (
+        <View style={style2 ? [styles.container, style2] : styles.container}>
+        <Text style={style1 ? [{color: 'rgb(105,105,105)'}, style1] : {color: 'rgb(105,105,105)'}}>Blood Group</Text>
+        <Dropdown
+            style={styles.dropdown}
+            iconStyle={styles.iconStyle}
+            data={myData ? myData : data}
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder={state ? state : '...'}
+            value={state}
+            onChange={item => onChangeValue(item.label)}
+            renderLeftIcon={() => (
+            <Fontisto 
+                style={styles.icon}
+                name="blood-drop" 
+                size={24}
+                color="red"
+            />
+            )}
         />
-        )}
-    />
-    </View>
-);
+        </View>
+    );
 };
 
 export default DropdownComponent;
