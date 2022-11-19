@@ -4,7 +4,7 @@ import Button from '../components/Button';
 import Input from '../components/Input';
 import DropdownComponent from '../components/Dropdown';
 import { database } from '../../firebase';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, doc , setDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from "../../firebase";
 
@@ -15,7 +15,8 @@ const SignUpScreen = ({ navigation }) => {
         phone: '',
         password: '',
         confirmPassword: '',
-        bloodGroup: ''
+        bloodGroup: '',
+        location: {}
     });
     const collectionRef = collection(database, 'users');
 
@@ -25,9 +26,12 @@ const SignUpScreen = ({ navigation }) => {
                 const user = userCredential.user;
                 console.log("User created with: " + user.email);
 
-                addDoc(collectionRef, {...data, uid: user.uid})
-                    .then(() => console.log('Data Added'))
-                    .catch(err => console.log(err.message))
+                setDoc(doc(database, "users", user.uid), {
+                    ...data,
+                    uid: user.uid
+                })
+                .then(() => console.log('Data Added'))
+                .catch(err => console.log(err.message))
             })
             .catch(err => console.log(err.message));
     }

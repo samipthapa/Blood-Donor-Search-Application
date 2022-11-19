@@ -4,6 +4,8 @@ import { Marker, Circle } from 'react-native-maps';
 import { StyleSheet, View, Dimensions } from 'react-native';
 import * as Location from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
+import { doc, updateDoc } from "firebase/firestore";
+import { database } from '../../firebase';
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width/height;
@@ -11,21 +13,6 @@ const LATITUDE_DELTA = 0.02;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const LOCATION_TASK_NAME = "LOCATION_TASK_NAME"
-
-TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
-  if (error) {
-      console.log('LOCATION_TRACKING task ERROR:', error);
-      return;
-  }
-  if (data) {
-      const { locations } = data;
-      let lat = locations[0].coords.latitude;
-      let long = locations[0].coords.longitude;
-console.log(
-          `${new Date(Date.now()).toLocaleString()}: ${lat},${long}`
-      );
-  }
-});
 
 const Map = () => {
   const [location, setLocation] = useState(null);
@@ -51,7 +38,6 @@ const Map = () => {
       })
     })();
   }, [])
-
 
   if (!location) {
     return null;
@@ -93,6 +79,26 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
   },
+});
+
+TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
+  if (error) {
+      console.log('LOCATION_TRACKING task ERROR:', error);
+      return;
+  }
+  if (data) {
+      const { locations } = data;
+      const location = {
+        latitude: locations[0].coords.latitude,
+        longitude: locations[0].coords.longitude
+      }
+      // const docToUpdate = doc(database, "users", 'lQde0PgFMzMQz0RbXaNj');
+      // updateDoc(docToUpdate, {
+      //   location: location,
+      // }).then(
+      //   console.log('Database updated')
+      // )
+  }
 });
 
 export default Map;
