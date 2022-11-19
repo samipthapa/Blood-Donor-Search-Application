@@ -9,7 +9,10 @@ import SignUpScreen from './src/screens/SignUpScreen';
 import LogInScreen from './src/screens/LogInScreen';
 import RequestScreen from './src/screens/RequestScreen';
 import 'react-native-gesture-handler';
+import * as TaskManager from 'expo-task-manager'
 import AppContext from './src/context/AppContext';
+import { doc, updateDoc } from "firebase/firestore";
+import { database } from './firebase';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -57,12 +60,36 @@ const MyStack = () => {
       </Stack.Navigator>
   )
 }
+const LOCATION_TASK_NAME = 'LOCATION_TASK_NAME'
 
 export default function App() {
   const [user, setUser] = React.useState({
     loggedIn: false
   });
   const state = {user, setUser};
+
+  TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
+    if (error) {
+        console.log('LOCATION_TRACKING task ERROR:', error);
+        return;
+    }
+    if (data) {
+        const { locations } = data;
+        const location = {
+          latitude: locations[0].coords.latitude,
+          longitude: locations[0].coords.longitude
+        }
+        if (user?.uid) {
+          const docToUpdate = doc(database, "users", user.uid);
+          updateDoc(docToUpdate, {
+            location: location,
+          }).then(
+            console.log('Database updated')
+          )
+        }
+    }
+  });
+
   return (
     <AppContext.Provider value={state}>
         <NavigationContainer>
