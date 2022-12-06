@@ -1,19 +1,19 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import AccountInfo from '../components/AccountInfo';
-import { AntDesign, Ionicons, Fontisto, Entypo, MaterialIcons } from '@expo/vector-icons';
+import { AntDesign, Ionicons, Fontisto, Entypo } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import AppContext from '../context/AppContext';
 import { query, where, collection, onSnapshot } from 'firebase/firestore';
 import { database } from '../../firebase';
+import { useSelector } from 'react-redux';
 
 const ProfileScreen = () => {
+    const uid = useSelector(state => state.uid);
     const [data, setData] = useState(null);
-    const {user, setUser} = useContext(AppContext);
 
     const collectionRef = collection(database, 'users');
 
-   const userQuery = query(collectionRef, where("uid", "==", user.uid));
+   const userQuery = query(collectionRef, where("uid", "==", uid));
 
    onSnapshot(userQuery, (data) => {
     const dataArr =data.docs.map((item) => {

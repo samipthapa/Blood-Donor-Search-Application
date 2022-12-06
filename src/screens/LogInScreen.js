@@ -5,8 +5,10 @@ import Input from "../components/Input";
 import { auth } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import AppContext from "../context/AppContext";
+import { useDispatch } from "react-redux";
 
 const LogInScreen = ({ navigation }) => {
+    const dispatch = useDispatch();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -17,9 +19,9 @@ const LogInScreen = ({ navigation }) => {
             .then(userCredential => {
                 const user = userCredential.user;
                 console.log(`Logged in with: ${user.email}`);
+                dispatch({type: 'uid', payload: user.uid});
                 setUser({
                     loggedIn: true,
-                    uid: user.uid,
                 })
             })
             .catch(error => {
