@@ -1,26 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import AccountInfo from '../components/AccountInfo';
 import { AntDesign, Ionicons, Fontisto, Entypo } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { query, where, collection, onSnapshot } from 'firebase/firestore';
-import { database } from '../../firebase';
 import { useSelector } from 'react-redux';
+import AppContext from '../context/AppContext';
 
 const ProfileScreen = () => {
-    const uid = useSelector(state => state.uid);
-    const [data, setData] = useState(null);
-
-    const collectionRef = collection(database, 'users');
-
-   const userQuery = query(collectionRef, where("uid", "==", uid));
-
-   onSnapshot(userQuery, (data) => {
-    const dataArr =data.docs.map((item) => {
-        return item.data();
-    })
-    setData(dataArr[0]);
-   })
+    const data = useSelector(state => state.userData);
+    const {user, setUser} = useContext(AppContext);
+    console.log(data);
 
    if(!data) return null;
 

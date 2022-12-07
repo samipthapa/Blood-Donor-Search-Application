@@ -1,11 +1,11 @@
 import { createStore } from 'redux';
 
-const reducerFn = (state = { uid: null, loggedIn: false }, action) => {
+const reducerFn = (state = { uid: null, userData: null }, action) => {
     switch(action.type) {
         case 'uid':
             return {...state, uid: action.payload}
-        case 'loggedIn':
-            return {...state, loggedIn: !loggedIn}
+        case 'userData':
+            return {...state, userData: action.payload}
     }
     return state;
 }

@@ -25,9 +25,10 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
         longitude: locations[0].coords.longitude
       }
       if (uid) {
-        const docToUpdate = doc(database, "users", uid);
+        const docToUpdate = doc(database, "location", uid);
         updateDoc(docToUpdate, {
-          location: location,
+          latitude: location.latitude,
+          longitude: location.longitude
         }).then(
           console.log('Database updated')
         )

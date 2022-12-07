@@ -16,7 +16,7 @@ const SignUpScreen = ({ navigation }) => {
         password: '',
         confirmPassword: '',
         bloodGroup: '',
-        location: {}
+        // location: {}
     });
     const collectionRef = collection(database, 'users');
 
@@ -28,6 +28,9 @@ const SignUpScreen = ({ navigation }) => {
 
                 setDoc(doc(database, "users", user.uid), {
                     ...data,
+                    uid: user.uid
+                })
+                setDoc(doc(database, "location", user.uid), {
                     uid: user.uid
                 })
                 .then(() => console.log('Data Added'))
