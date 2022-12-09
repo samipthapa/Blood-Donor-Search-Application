@@ -3,6 +3,10 @@ import { View, StyleSheet, Text, TextInput } from 'react-native';
 import { CheckBox } from '@rneui/themed';
 import Dropdown from  "../components/Dropdown";
 import Button from '../components/Button';
+import useHaversine from '../hooks/useHaversine';
+import { useSelector } from 'react-redux';
+import { query, where, collection, onSnapshot } from 'firebase/firestore';
+import { database } from '../../firebase';
 
 const data = [
     { label: 'Blood Group: A+', value: '1' },
@@ -19,6 +23,21 @@ const RequestScreen = () => {
     const [blood, setBlood] = useState(false);
     const [bloodGrp, setBloodGrp] = useState(data[0].label);
     const [platelets, setPlatelets] = useState(false);
+    const uid = useSelector(state => state.uid);
+
+    const handleSubmit = () => {
+        const collectionRef = collection(database, 'location');
+        const locationQuery = query(collectionRef, where("uid", "==", uid));
+        onSnapshot(locationQuery, (data) => {
+            const dataArr =data.docs.map((item) => {
+                return item.data();
+            })
+            useHaversine(bloodGrp, {
+                latitude: dataArr[0].latitude,
+                longitude: dataArr[0].longitude
+            });
+        })
+    }
 
     return (
         <View style={styles.container}>
@@ -53,7 +72,6 @@ const RequestScreen = () => {
                 style2={{width: '100%'}}
                 state={bloodGrp}
                 onChangeValue={value => {
-                    console.log(value);
                     setBloodGrp(value);
                 }}
                 myData={data}
@@ -64,7 +82,10 @@ const RequestScreen = () => {
                 placeholderTextColor="black"
                 style={styles.inputStyle}
             />
-            <Button text="Submit" />
+            <Button 
+                text="Submit"
+                onSubmit={handleSubmit}
+            />
         </View>
     );
 };

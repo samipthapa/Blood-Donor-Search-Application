@@ -45,7 +45,7 @@ function cos(angle) {
     return result;
 }
 
-function Haversine(coord1, coord2) {
+export function Haversine(coord1, coord2) {
     const { lon1, lat1 } = coord1;
     const { lon2, lat2 } = coord2;
 
@@ -66,7 +66,7 @@ function Haversine(coord1, coord2) {
 
     meters = parseFloat(meters.toFixed(2));
     km = parseFloat(km.toFixed(2));
-    console.log(km);
+    return km;
 }
 
 const coord1 = {
@@ -77,4 +77,3 @@ const coord2 = {
     lon2: 74.0445,
     lat2: 40.6892
 };
-Haversine(coord1, coord2);  

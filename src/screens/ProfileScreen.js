@@ -9,7 +9,6 @@ import AppContext from '../context/AppContext';
 const ProfileScreen = () => {
     const data = useSelector(state => state.userData);
     const {user, setUser} = useContext(AppContext);
-    console.log(data);
 
    if(!data) return null;
 
