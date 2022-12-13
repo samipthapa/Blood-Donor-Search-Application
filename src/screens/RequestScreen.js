@@ -3,10 +3,10 @@ import { View, StyleSheet, Text, TextInput } from 'react-native';
 import { CheckBox } from '@rneui/themed';
 import Dropdown from  "../components/Dropdown";
 import Button from '../components/Button';
-import useHaversine from '../hooks/useHaversine';
 import { useSelector } from 'react-redux';
-import { query, where, collection, onSnapshot } from 'firebase/firestore';
+import { query, where, collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { database } from '../../firebase';
+import { Haversine } from '../Haversine';
 
 const data = [
     { label: 'Blood Group: A+', value: '1' },
@@ -23,21 +23,52 @@ const RequestScreen = () => {
     const [blood, setBlood] = useState(false);
     const [bloodGrp, setBloodGrp] = useState(data[0].label);
     const [platelets, setPlatelets] = useState(false);
-    const uid = useSelector(state => state.uid);
+    const [userInfo, setUserInfo] = useState([]);
+    const currentUser = useSelector(state => state.uid);
 
     const handleSubmit = () => {
-        const collectionRef = collection(database, 'location');
-        const locationQuery = query(collectionRef, where("uid", "==", uid));
-        onSnapshot(locationQuery, (data) => {
-            const dataArr =data.docs.map((item) => {
-                return item.data();
+        setUserInfo([]);
+        const blood = bloodGrp.slice(13);
+        
+        ( async () => {
+            const myLocationRef = doc(database, "location", currentUser);
+            const myLocationSnap = await getDoc(myLocationRef);
+            const myLocation = {
+                lon1: myLocationSnap.data().longitude,
+                lat1: myLocationSnap.data().latitude
+            }
+
+            const bloodQuery = query(collection(database, "users"), where('bloodGroup', '==', blood));
+            const bloodSnapshot = await getDocs(bloodQuery);
+
+            bloodSnapshot.forEach((user) => {
+                const uid = user.id;
+                ( async () => {
+                    const locationQuery = query(collection(database, "location"), where("uid", "==", uid));
+                    const locationSnapshot = await getDocs(locationQuery);
+                    locationSnapshot.forEach((location) => {
+                        const distance = Haversine(myLocation, {
+                            lon2: location.data().longitude,
+                            lat2: location.data().latitude
+                        })
+                        if (currentUser != uid) {
+                            setUserInfo(prev => [
+                                ...prev,
+                                {
+                                    uid: uid,
+                                    name: user.data().name,
+                                    phone: user.data().phone,
+                                    distance: distance
+                                }
+                            ])
+                        }
+                    })
+                })();
             })
-            useHaversine(bloodGrp, {
-                latitude: dataArr[0].latitude,
-                longitude: dataArr[0].longitude
-            });
-        })
+        })();
     }
+    
+    console.log(userInfo);
 
     return (
         <View style={styles.container}>

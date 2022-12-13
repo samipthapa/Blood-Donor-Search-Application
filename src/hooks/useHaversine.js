@@ -1,8 +1,10 @@
 import { database } from "../../firebase";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { Haversine } from "../Haversine";
+import { useState } from "react";
 
 const useHaversine = (bloodGrp, location) => {
+    const [data, setData] = useState(null);
     const blood = bloodGrp.slice(13);
 
     const userRef = collection(database, 'users');
@@ -10,12 +12,13 @@ const useHaversine = (bloodGrp, location) => {
 
     const bloodQuery = query(userRef, where("bloodGroup", "==", blood));
     onSnapshot(bloodQuery, (data) => {
-        const uidArray = data.docs.map((item) => {
-            return item.data()['uid'];
+        const userArr = data.docs.map((item) => {
+            return item.data();
         })
+        console.log(userArr);
 
-        for (let i=0; i<uidArray.length; i++) {
-            const locationQuery = query(locationRef, where("uid", "==", uidArray[i]));
+        for (let i=0; i<userArr.length; i++) {
+            const locationQuery = query(locationRef, where("uid", "==", userArr[i]['uid']));
             onSnapshot(locationQuery, (data) => {
                 const locationArr = data.docs.map((item) => {
                     return item.data();

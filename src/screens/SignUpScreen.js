@@ -16,7 +16,6 @@ const SignUpScreen = ({ navigation }) => {
         password: '',
         confirmPassword: '',
         bloodGroup: '',
-        // location: {}
     });
     const collectionRef = collection(database, 'users');
 
