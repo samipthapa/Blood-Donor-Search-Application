@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { query, where, collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { database } from '../../firebase';
 import { Haversine } from '../Haversine';
+import UserPopup from '../components/UserPopup';
 
 const data = [
     { label: 'Blood Group: A+', value: '1' },
@@ -68,7 +69,11 @@ const RequestScreen = () => {
         })();
     }
     
-    console.log(userInfo);
+    const suitableUsers = userInfo.map((item, index, arr) => {
+        return (
+                <UserPopup {...item} key={index}/>
+        )
+    })
 
     return (
         <View style={styles.container}>
@@ -117,19 +122,15 @@ const RequestScreen = () => {
                 text="Submit"
                 onSubmit={handleSubmit}
             />
+            {suitableUsers}
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        height: '70%',
-        width: '80%',
-        marginTop: 'auto',
-        marginBottom: 'auto',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        justifyContent: 'center'
+        marginTop: 100,
+        marginHorizontal: 30
     },
     dropdown: {
         width: '100%'

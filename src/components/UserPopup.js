@@ -1,17 +1,52 @@
 import React from 'react';
-import { Text, StyleSheet, View } from 'react-native';
+import { Text, StyleSheet, View, Image } from 'react-native';
+import Button from './Button';
 
-const UserPopup = () => {
+const UserPopup = ({name, distance}) => {
     return (
-        <View>
-            <Text>UserPopup</Text>
-            <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In non sollicitudin ipsum. Duis ornare sed diam eget malesuada. Morbi ac magna vitae eros gravida tempor at sit amet nibh. Nam sagittis vel risus non interdum. Integer aliquet felis eu ligula vulputate, et cursus nisi molestie. Aenean magna lacus, suscipit ut fermentum a, ultrices a nisl. Quisque urna nibh, rhoncus non justo eu, congue gravida sem. Nam urna ex, dignissim ac libero ac, luctus posuere leo. Vestibulum malesuada nunc metus, quis imperdiet ipsum vestibulum at. Curabitur vel condimentum massa, ut dignissim sem. Quisque eu molestie est, ac porta tellus. Nullam venenatis.</Text>
+        <View style={styles.container}>
+            <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
+                <Image style={styles.imageStyle} source={require('../../assets/Avatar.png')} />
+                <View>
+                    <Text style={styles.textStyle}>{name}</Text>
+                    <Text>{distance} KM</Text>
+                </View>
+            </View>
+            <View style={styles.buttonContainer}>
+                <Button 
+                    text="Send Request"
+                    buttonStyle={{width: 140, backgroundColor: 'rgb(50,205,50)', borderRadius: 20,
+                     padding: 7, alignItems: 'center', marginTop: 5}}
+                    textStyle={{color: 'black', fontSize: 16, fontWeight: 'bold'}}
+                />
+                <Button 
+                    text="Cancel"
+                    buttonStyle={{width: 140, backgroundColor: 'rgb(206,38,1)', borderRadius: 20,
+                     padding: 7, alignItems: 'center', marginTop: 5}}
+                />
+            </View>
         </View>
     )
 };
 
 const styles = StyleSheet.create({
-
+    container: {
+        backgroundColor: 'rgb(238, 238, 228)',
+        padding: 10,
+        borderRadius: 10
+    },
+    imageStyle: {
+        height: 50,
+        width: 50,
+        marginHorizontal: 10,
+    },
+    textStyle: {
+        fontSize: 16,
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around'
+    }
 });
 
 export default UserPopup;
