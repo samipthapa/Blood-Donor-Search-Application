@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, TextInput } from 'react-native';
+import { View, StyleSheet, Text, TextInput, ScrollView, FlatList, Pressable } from 'react-native';
 import { CheckBox } from '@rneui/themed';
 import Dropdown from  "../components/Dropdown";
 import Button from '../components/Button';
@@ -52,7 +52,7 @@ const RequestScreen = () => {
                             lon2: location.data().longitude,
                             lat2: location.data().latitude
                         })
-                        if (currentUser != uid) {
+                        if (currentUser != uid && !isNaN(distance)) {
                             setUserInfo(prev => [
                                 ...prev,
                                 {
@@ -68,12 +68,6 @@ const RequestScreen = () => {
             })
         })();
     }
-    
-    const suitableUsers = userInfo.map((item, index, arr) => {
-        return (
-                <UserPopup {...item} key={index}/>
-        )
-    })
 
     return (
         <View style={styles.container}>
@@ -122,7 +116,14 @@ const RequestScreen = () => {
                 text="Submit"
                 onSubmit={handleSubmit}
             />
-            {suitableUsers}
+            <FlatList
+                data={userInfo}
+                keyExtractor={item => item.uid}
+                renderItem={({item}) => {
+                    return <UserPopup name={item.name} distance={item.distance} />
+                }}
+                showsVerticalScrollIndicator={false}
+            />
         </View>
     );
 };
@@ -130,7 +131,8 @@ const RequestScreen = () => {
 const styles = StyleSheet.create({
     container: {
         marginTop: 100,
-        marginHorizontal: 30
+        marginHorizontal: 30,
+        flex: 1
     },
     dropdown: {
         width: '100%'

@@ -33,7 +33,8 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: 'rgb(238, 238, 228)',
         padding: 10,
-        borderRadius: 10
+        borderRadius: 10,
+        marginVertical: 10
     },
     imageStyle: {
         height: 50,
