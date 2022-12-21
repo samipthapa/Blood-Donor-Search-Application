@@ -31,12 +31,6 @@ const RequestScreen = () => {
         const blood = bloodGrp.slice(13);
         
         ( async () => {
-            // const myLocationRef = doc(database, "location", currentUser);
-            // const myLocationSnap = await getDoc(myLocationRef);
-            // const myLocation = {
-            //     lon1: myLocationSnap.data().longitude,
-            //     lat1: myLocationSnap.data().latitude
-            // }
 
             const myLocationSnap = await firestore().collection('location').doc(currentUser).get();
             const myLocation = {
@@ -44,16 +38,11 @@ const RequestScreen = () => {
                 lat1: myLocationSnap.data().latitude
             }
 
-            // const bloodQuery = query(collection(database, "users"), where('bloodGroup', '==', blood));
-            // const bloodSnapshot = await getDocs(bloodQuery);
-
             const bloodSnapshot = await firestore().collection('users').where('bloodGroup', '==', blood).get();
 
             bloodSnapshot.forEach((user) => {
                 const uid = user.id;
                 ( async () => {
-                    // const locationQuery = query(collection(database, "location"), where("uid", "==", uid));
-                    // const locationSnapshot = await getDocs(locationQuery);
                     
                     const locationSnapshot = await firestore().collection('location').where("uid", "==", uid).get();
 
