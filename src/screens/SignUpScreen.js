@@ -3,10 +3,8 @@ import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import DropdownComponent from '../components/Dropdown';
-import { database } from '../../firebase';
-import { collection, doc , setDoc } from 'firebase/firestore';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from "../../firebase";
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 const SignUpScreen = ({ navigation }) => {
     const [data, setData] = useState({
@@ -17,25 +15,29 @@ const SignUpScreen = ({ navigation }) => {
         confirmPassword: '',
         bloodGroup: '',
     });
-    const collectionRef = collection(database, 'users');
 
     const handleSignUp = () => {
-        createUserWithEmailAndPassword(auth, data.email, data.password)
-            .then(userCredential => {
+        auth()
+            .createUserWithEmailAndPassword(data.email, data.password)
+            .then((userCredential) => {
                 const user = userCredential.user;
-                console.log("User created with: " + user.email);
+                console.log('User created with: ' + user.email);
 
-                setDoc(doc(database, "users", user.uid), {
-                    ...data,
-                    uid: user.uid
-                })
-                setDoc(doc(database, "location", user.uid), {
-                    uid: user.uid
-                })
-                .then(() => console.log('Data Added'))
-                .catch(err => console.log(err.message))
+                firestore()
+                    .collection('users')
+                    .doc(user.uid)
+                    .set({
+                        ...data,
+                        uid: user.uid
+                    })
+                
+                firestore()
+                    .collection('location')
+                    .doc(user.uid)
+                    .set({
+                        uid: user.uid
+                    })
             })
-            .catch(err => console.log(err.message));
     }
 
     return (

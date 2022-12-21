@@ -2,10 +2,9 @@ import React, {useContext, useState} from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import Button from "../components/Button";
 import Input from "../components/Input";
-import { auth } from "../../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import AppContext from "../context/AppContext";
 import { useDispatch } from "react-redux";
+import auth from '@react-native-firebase/auth';
 
 const LogInScreen = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -15,7 +14,8 @@ const LogInScreen = ({ navigation }) => {
     const { user, setUser } = useContext(AppContext);
 
     const handleLogin = () => {
-        signInWithEmailAndPassword(auth, email, password)
+        auth()
+            .signInWithEmailAndPassword(email, password)
             .then(userCredential => {
                 const user = userCredential.user;
                 console.log(`Logged in with: ${user.email}`);

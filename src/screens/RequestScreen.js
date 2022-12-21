@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Text, TextInput, ScrollView, FlatList, Pressable } from 'react-native';
+import { View, StyleSheet, Text, TextInput, FlatList } from 'react-native';
 import { CheckBox } from '@rneui/themed';
 import Dropdown from  "../components/Dropdown";
 import Button from '../components/Button';
 import { useSelector } from 'react-redux';
-import { query, where, collection, doc, getDoc, getDocs } from 'firebase/firestore';
-import { database } from '../../firebase';
 import { Haversine } from '../Haversine';
 import UserPopup from '../components/UserPopup';
+import firestore from '@react-native-firebase/firestore';
 
 const data = [
     { label: 'Blood Group: A+', value: '1' },
@@ -32,21 +31,32 @@ const RequestScreen = () => {
         const blood = bloodGrp.slice(13);
         
         ( async () => {
-            const myLocationRef = doc(database, "location", currentUser);
-            const myLocationSnap = await getDoc(myLocationRef);
+            // const myLocationRef = doc(database, "location", currentUser);
+            // const myLocationSnap = await getDoc(myLocationRef);
+            // const myLocation = {
+            //     lon1: myLocationSnap.data().longitude,
+            //     lat1: myLocationSnap.data().latitude
+            // }
+
+            const myLocationSnap = await firestore().collection('location').doc(currentUser).get();
             const myLocation = {
                 lon1: myLocationSnap.data().longitude,
                 lat1: myLocationSnap.data().latitude
             }
 
-            const bloodQuery = query(collection(database, "users"), where('bloodGroup', '==', blood));
-            const bloodSnapshot = await getDocs(bloodQuery);
+            // const bloodQuery = query(collection(database, "users"), where('bloodGroup', '==', blood));
+            // const bloodSnapshot = await getDocs(bloodQuery);
+
+            const bloodSnapshot = await firestore().collection('users').where('bloodGroup', '==', blood).get();
 
             bloodSnapshot.forEach((user) => {
                 const uid = user.id;
                 ( async () => {
-                    const locationQuery = query(collection(database, "location"), where("uid", "==", uid));
-                    const locationSnapshot = await getDocs(locationQuery);
+                    // const locationQuery = query(collection(database, "location"), where("uid", "==", uid));
+                    // const locationSnapshot = await getDocs(locationQuery);
+                    
+                    const locationSnapshot = await firestore().collection('location').where("uid", "==", uid).get();
+
                     locationSnapshot.forEach((location) => {
                         const distance = Haversine(myLocation, {
                             lon2: location.data().longitude,

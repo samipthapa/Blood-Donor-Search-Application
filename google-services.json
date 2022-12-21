@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "158515129895",
+    "project_id": "blooddonor2-d30d1",
+    "storage_bucket": "blooddonor2-d30d1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:158515129895:android:0eac01fcc13eb2e36fe802",
+        "android_client_info": {
+          "package_name": "com.samipbthapa.BloodDonorSearch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "158515129895-dtei9rpp7nallcehccl7eev5gb6shdk1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.samipbthapa.BloodDonorSearch",
+            "certificate_hash": "6e39431dce9cabd83bea3c4ebee1e019d742df5f"
+          }
+        },
+        {
+          "client_id": "158515129895-s6ormi5e39lm4blmjpck6u0qg0lb2rmd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.samipbthapa.BloodDonorSearch",
+            "certificate_hash": "38c9d247304aa668529847dece2d191b6656b35f"
+          }
+        },
+        {
+          "client_id": "158515129895-vdp1u1asnrsvonumuvdg3k3c85orksjc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWCzFY6pMyz1BqW_W1EX9v8L2KO2NAjyk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "158515129895-vdp1u1asnrsvonumuvdg3k3c85orksjc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import MapView from 'react-native-maps';
 import { Marker, Circle } from 'react-native-maps';
 import { StyleSheet, View, Dimensions } from 'react-native';
@@ -28,7 +28,7 @@ const Map = () => {
 
       await Location.startLocationUpdatesAsync('LOCATION_TASK_NAME', {
         accuracy: Location.Accuracy.Highest,
-        timeInterval: 15000,
+        timeInterval: 10000,
         distanceInterval: 0
       })
     })();

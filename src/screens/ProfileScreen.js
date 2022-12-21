@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import AccountInfo from '../components/AccountInfo';
 import { AntDesign, Ionicons, Fontisto, Entypo } from '@expo/vector-icons';
