@@ -3,11 +3,21 @@ import { StyleSheet } from 'react-native';
 import MapComponent from "../components/MapComponent";
 import { useSelector, useDispatch } from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
+import store from '../store';
 
 const HomeScreen = () => {
     const dispatch = useDispatch();
 
     const uid = useSelector(state => state.uid);
+    const token = store.getState().fcmToken;
+
+    firestore()
+        .collection('users')
+        .doc(uid)
+        .update({
+            fcmToken: token
+        })
+
     firestore()
         .collection('users')
         .where('uid', '==', uid)

@@ -6,6 +6,8 @@ const reducerFn = (state = { uid: null, userData: null }, action) => {
             return {...state, uid: action.payload}
         case 'userData':
             return {...state, userData: action.payload}
+        case 'fcmToken':
+            return {...state, fcmToken: action.payload}
     }
     return state;
 }

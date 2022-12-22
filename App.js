@@ -27,13 +27,6 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
         longitude: locations[0].coords.longitude
       }
       if (uid) {
-        // const docToUpdate = doc(database, "location", uid);
-        // updateDoc(docToUpdate, {
-        //   latitude: location.latitude,
-        //   longitude: location.longitude
-        // }).then(
-        //   console.log('Database updated')
-        // )
         firestore()
           .collection('location')
           .doc(uid)
@@ -49,6 +42,14 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
 });
 
 export default function App() {
+
+  const addToken = (token) => {
+    return {
+      type: 'fcmToken',
+      payload: token
+    }
+  }
+
   const [user, setUser] = React.useState({
     loggedIn: false
   });
@@ -59,16 +60,13 @@ export default function App() {
     const enabled =
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
-    if (enabled) {
-      console.log('Authorization status:', authStatus);
-    }
   }
 
   useEffect(() => {
+
     if (requestUserPermission()) {
       messaging().getToken().then(token => {
-        console.log(token);
+        store.dispatch(addToken(token));
       });
     }
     else {
