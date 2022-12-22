@@ -5,6 +5,7 @@ import { AntDesign, Ionicons, Fontisto, Entypo } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSelector } from 'react-redux';
 import AppContext from '../context/AppContext';
+import firestore from '@react-native-firebase/firestore';
 
 const ProfileScreen = () => {
     const data = useSelector(state => state.userData);
@@ -54,7 +55,10 @@ const ProfileScreen = () => {
                 <TouchableOpacity
                     style={styles.logout}
                     onPress={() => {
-                        setUser({loggedIn: false})
+                        firestore().collection('users').doc(data.uid).update({
+                            fcmToken: firestore.FieldValue.delete(),
+                        });
+                        setUser({loggedIn: false});
                     }}
                 >
                     <AntDesign name="logout" size={25} color="white" style={{marginHorizontal: 4}}/>
