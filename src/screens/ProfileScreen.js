@@ -5,7 +5,6 @@ import { AntDesign, Ionicons, Fontisto, Entypo } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSelector } from 'react-redux';
 import AppContext from '../context/AppContext';
-import firestore from '@react-native-firebase/firestore';
 
 const ProfileScreen = () => {
     const data = useSelector(state => state.userData);

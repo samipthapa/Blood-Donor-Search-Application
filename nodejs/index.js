@@ -15,7 +15,7 @@ app.post('/send-notification', (req, res) => {
     const message = {
         notification: {
             title: "Blood Request",
-            body: "Neema Khati has sent you a blood request"
+            body: `${req.body.name} has sent you a blood request`
         },
         token: req.body.token
     }
