@@ -58,6 +58,7 @@ const RequestScreen = () => {
                                     uid: uid,
                                     name: user.data().name,
                                     phone: user.data().phone,
+                                    token: user.data().fcmToken,
                                     distance: distance
                                 }
                             ])
@@ -119,7 +120,7 @@ const RequestScreen = () => {
                 data={userInfo}
                 keyExtractor={item => item.uid}
                 renderItem={({item}) => {
-                    return <UserPopup name={item.name} distance={item.distance} />
+                    return <UserPopup name={item.name} distance={item.distance} token={item.token}/>
                 }}
                 showsVerticalScrollIndicator={false}
             />

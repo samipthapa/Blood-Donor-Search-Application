@@ -55,9 +55,9 @@ const ProfileScreen = () => {
                 <TouchableOpacity
                     style={styles.logout}
                     onPress={() => {
-                        firestore().collection('users').doc(data.uid).update({
-                            fcmToken: firestore.FieldValue.delete(),
-                        });
+                        // firestore().collection('users').doc(data.uid).update({
+                        //     fcmToken: firestore.FieldValue.delete(),
+                        // });
                         setUser({loggedIn: false});
                     }}
                 >

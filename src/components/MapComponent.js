@@ -28,7 +28,7 @@ const Map = () => {
 
       await Location.startLocationUpdatesAsync('LOCATION_TASK_NAME', {
         accuracy: Location.Accuracy.Highest,
-        timeInterval: 10000,
+        timeInterval: 30000,
         distanceInterval: 0
       })
     })();

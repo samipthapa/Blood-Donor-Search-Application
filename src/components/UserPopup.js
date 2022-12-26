@@ -2,7 +2,19 @@ import React from 'react';
 import { Text, StyleSheet, View, Image } from 'react-native';
 import Button from './Button';
 
-const UserPopup = ({name, distance}) => {
+const UserPopup = ({name, distance, token}) => {
+    const sendNotification = () => {
+        fetch('https://8a09-2400-1a00-b020-b1af-78e3-c2a0-559-5236.ngrok.io/send-notification', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify({
+                token: token
+            })
+        })
+    }
+
     return (
         <View style={styles.container}>
             <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
@@ -18,6 +30,7 @@ const UserPopup = ({name, distance}) => {
                     buttonStyle={{width: 140, backgroundColor: 'rgb(50,205,50)', borderRadius: 20,
                      padding: 7, alignItems: 'center', marginTop: 5}}
                     textStyle={{color: 'black', fontSize: 16, fontWeight: 'bold'}}
+                    onSubmit={sendNotification}
                 />
                 <Button 
                     text="Cancel"
