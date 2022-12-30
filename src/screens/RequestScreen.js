@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { Haversine } from '../Haversine';
 import UserPopup from '../components/UserPopup';
 import firestore from '@react-native-firebase/firestore';
+import {Slider} from '@miblanchard/react-native-slider';
 
 const data = [
     { label: 'Blood Group: A+', value: '1' },
@@ -23,6 +24,7 @@ const RequestScreen = () => {
     const [blood, setBlood] = useState(false);
     const [bloodGrp, setBloodGrp] = useState(data[0].label);
     const [platelets, setPlatelets] = useState(false);
+    const [radius, setRadius] = useState(1);
     const [userInfo, setUserInfo] = useState([]);
     const currentUser = useSelector(state => state.uid);
 
@@ -71,8 +73,8 @@ const RequestScreen = () => {
 
     return (
         <View style={styles.container}>
-            <Text>Kindly fill below details accourately to help you better</Text>
-            <Text style={{marginTop: 20, color: 'rgb(105,105,105)'}}>Type</Text>
+            <Text style={{fontSize: 16, fontWeight: 'bold'}}>Kindly fill below details accurately to help you better</Text>
+            <Text style={{marginTop: 20, color: 'rgb(105,105,105)', fontSize:15}}>Type</Text>
             <View style={styles.type}>
                 <CheckBox
                     title="Blood"
@@ -98,7 +100,7 @@ const RequestScreen = () => {
                 />
             </View>
             <Dropdown
-                style1={{marginTop: 10, marginBottom: 5 }}
+                style1={{marginBottom: 15}}
                 style2={{width: '100%'}}
                 state={bloodGrp}
                 onChangeValue={value => {
@@ -106,12 +108,31 @@ const RequestScreen = () => {
                 }}
                 myData={data}
             />
-            <Text style={{marginTop: 30, color: 'rgb(105,105,105)'}}>Blood Units Required</Text>
+            <Text style={styles.textStyle}>Blood Units Required</Text>
             <TextInput 
                 placeholder='Blood Units'
                 placeholderTextColor="black"
                 style={styles.inputStyle}
             />
+            <Text style={styles.textStyle}>Search Radius</Text>
+            <Slider
+                value={radius}
+                onValueChange={(value) => setRadius(value)}
+                maximumValue={5}
+                minimumValue={1}
+                step={1}
+                thumbTintColor='rgb(206,38,1)'
+                minimumTrackTintColor='rgb(206,38,1)'
+                thumbStyle={styles.thumb}
+            />
+            <View style={{ flexDirection: 'row', alignItems: 'center',
+                 justifyContent:'space-between', marginBottom: 10 }}>
+                <Text style={{ color: 'black', fontSize: 14 }}>1 km</Text>
+                <Text style={{ color: 'black', fontSize: 14 }}>2 km</Text>
+                <Text style={{ color: 'black', fontSize: 14 }}>3 km</Text>
+                <Text style={{ color: 'black', fontSize: 14 }}>4 km</Text>
+                <Text style={{ color: 'black', fontSize: 14 }}>5 km</Text>
+            </View>
             <Button 
                 text="Submit"
                 onSubmit={handleSubmit}
@@ -139,13 +160,23 @@ const styles = StyleSheet.create({
     },
     inputStyle: {
         backgroundColor: 'rgb(220,220,220)',
-        marginTop: 5,
         paddingHorizontal: 10,
         paddingVertical: 2,
         borderRadius: 5
     },
     type: {
         flexDirection: 'row'
+    },
+    thumb: {
+        height: 25,
+        width: 25,
+        borderRadius: 20,
+    },
+    textStyle: {
+        marginTop: 30,
+        color: 'rgb(105,105,105)',
+        marginBottom: 15,
+        fontSize:15
     }
 });
 

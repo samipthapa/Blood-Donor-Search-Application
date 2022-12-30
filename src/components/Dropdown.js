@@ -18,7 +18,7 @@ const data = [
 const DropdownComponent = ({ state, onChangeValue, myData, style1, style2 }) => {
     return (
         <View style={style2 ? [styles.container, style2] : styles.container}>
-        <Text style={style1 ? [{color: 'rgb(105,105,105)'}, style1] : {color: 'rgb(105,105,105)'}}>Blood Group</Text>
+        <Text style={style1 ? [{color: 'rgb(105,105,105)', fontSize: 15}, style1] : {color: 'rgb(105,105,105)'}}>Blood Group</Text>
         <Dropdown
             style={styles.dropdown}
             iconStyle={styles.iconStyle}

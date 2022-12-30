@@ -103,15 +103,15 @@ export default function App() {
           channelId: 'default',
           actions: [
               {
+                title: 'Reject',
+                pressAction: {
+                  id: 'reject',
+                },
+              },
+              {
                   title: 'Accept',
                   pressAction: {
                     id: 'accept',
-                  },
-              },
-              {
-                  title: 'Reject',
-                  pressAction: {
-                    id: 'reject',
                   },
               },
           ],
