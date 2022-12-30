@@ -6,14 +6,14 @@ import { useSelector } from 'react-redux';
 const UserPopup = ({name, distance, token}) => {
     const data = useSelector(state => state.userData);
     const sendNotification = () => {
-        fetch('https://2aa3-2400-1a00-b020-b1af-78e3-c2a0-559-5236.ngrok.io/send-notification', {
+        fetch('https://bee6-2400-1a00-b020-c335-bcc3-dfae-8246-92d7.ngrok.io/send-notification', {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json'
             },
             body:JSON.stringify({
                 name: data.name,
-                token: token
+                token: token,
             })
         })
     }

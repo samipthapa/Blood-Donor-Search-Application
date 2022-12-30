@@ -1,5 +1,6 @@
 const admin = require('firebase-admin');
 const express = require('express');
+
 const app = express();
 
 var serviceAccount = require("./blooddonor2-d30d1-firebase-adminsdk-nf6k0-c38ca8c9f3.json");
@@ -13,9 +14,9 @@ admin.initializeApp({
 app.post('/send-notification', (req, res) => {
     console.log(req.body);
     const message = {
-        notification: {
+        data: {
             title: "Blood Request",
-            body: `${req.body.name} has sent you a blood request`
+            body: `${req.body.name} has sent you a blood request`,
         },
         token: req.body.token
     }

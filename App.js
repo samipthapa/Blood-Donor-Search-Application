@@ -11,6 +11,7 @@ import BottomTabNavigator from './src/navigation/BottomTabNavigator';
 import messaging from '@react-native-firebase/messaging';
 import { Alert } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
+import notifee from '@notifee/react-native';
 
 const LOCATION_TASK_NAME = 'LOCATION_TASK_NAME'
 
@@ -95,8 +96,28 @@ export default function App() {
     });
 
     messaging().setBackgroundMessageHandler(async remoteMessage => {
-      console.log('Message handled in the background!', remoteMessage);
-    });    
+      await notifee.displayNotification({
+        title: remoteMessage.data.title,
+        body: remoteMessage.data.body,
+        android: {
+          channelId: 'default',
+          actions: [
+              {
+                  title: 'Accept',
+                  pressAction: {
+                    id: 'accept',
+                  },
+              },
+              {
+                  title: 'Reject',
+                  pressAction: {
+                    id: 'reject',
+                  },
+              },
+          ],
+        },
+      });
+    });
 
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
