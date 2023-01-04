@@ -73,8 +73,7 @@ const RequestScreen = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={{fontSize: 16, fontWeight: 'bold'}}>Kindly fill below details accurately to help you better</Text>
-            <Text style={{marginTop: 20, color: 'rgb(105,105,105)', fontSize:15}}>Type</Text>
+            <Text style={{ color: 'rgb(105,105,105)', fontSize:15}}>Type</Text>
             <View style={styles.type}>
                 <CheckBox
                     title="Blood"
@@ -151,7 +150,7 @@ const RequestScreen = () => {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 100,
+        marginTop: 10,
         marginHorizontal: 30,
         flex: 1
     },
