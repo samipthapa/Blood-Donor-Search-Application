@@ -2,6 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import RequestScreen from '../screens/RequestScreen';
+import RequestList from '../screens/RequestList';
 import { Ionicons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
@@ -15,20 +16,23 @@ const BottomTab = () => {
                 let iconName;
                 let rn = route.name;
       
-                if (rn === 'Home') {
-                  iconName = focused ? 'home' : 'home-outline'
+                if (rn === 'Map View') {
+                  iconName = focused ? 'map-sharp' : 'map-outline'
                 } else if (rn === 'Profile') {
                   iconName = focused ? 'ios-person' : 'ios-person-outline'
                 } else if (rn === 'Request Blood') {
                   iconName = focused ? 'water' : 'water-outline'
+                } else if (rn === 'Request List') {
+                  iconName = focused ? 'list-outline' : 'list-sharp'
                 }
-                return <Ionicons name={iconName} size={size} color={color} />
+                return <Ionicons name={iconName} size={size} color='rgb(206,38,1)' />
             },
             headerShown: false,
           })}
           initialRouteName={HomeScreen}
         >
-          <Tab.Screen name="Home" component={HomeScreen} />
+          <Tab.Screen name="Map View" component={HomeScreen} />
+          <Tab.Screen name="Request List" component={RequestList} />
           <Tab.Screen name="Request Blood" component={RequestScreen} />
           <Tab.Screen name="Profile" component={ProfileScreen} />
       </Tab.Navigator>
