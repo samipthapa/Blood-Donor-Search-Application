@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Text, TextInput, FlatList, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TextInput, Image, TouchableOpacity } from 'react-native';
 import { CheckBox } from '@rneui/themed';
 import Dropdown from  "../components/Dropdown";
 import ButtonComponent from '../components/Button';
@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { Haversine } from '../Haversine';
 import UserPopup from '../components/UserPopup';
 import firestore from '@react-native-firebase/firestore';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const data = [
     { label: 'Blood Group: A+', value: '1' },
@@ -20,7 +21,7 @@ const data = [
 ];
 
 const Button = (props) => {
-    const { label, onPress, highlightedButton, index, clearHighlight, style } = props;
+    const { label, onPress, highlightedButton, index, clearHighlight } = props;
     const [highlighted, setHighlighted] = useState(highlightedButton === index);
 
     useEffect(() => {
@@ -35,7 +36,7 @@ const Button = (props) => {
             onPress={() => {
                 clearHighlight();
                 setHighlighted(true);
-                onPress(index);
+                onPress(index, label);
             }}
         >
                 <Text style={highlighted ? styles.textPress : null}>{label}</Text>
@@ -49,11 +50,14 @@ const RequestScreen = () => {
     const [platelets, setPlatelets] = useState(false);
     const [userInfo, setUserInfo] = useState([]);
     const [highlightedButton, setHighlightedButton] = useState(null);
+    const [highlightedLabel, setHighlightedLabel] = useState(null);
+    
 
     const currentUser = useSelector(state => state.uid);
 
     const clearHighlight = () => {
         setHighlightedButton(null);
+        setHighlightedLabel(null);
     }
 
     const getCurrentDate=(add)=>{
@@ -122,114 +126,212 @@ const RequestScreen = () => {
     }
 
     return (
-        <View style={styles.container}>
-            <Text style={{ color: 'rgb(105,105,105)', fontSize:15}}>Type</Text>
-            <View style={styles.type}>
-                <CheckBox
-                    title="Blood"
-                    center
-                    checkedIcon="dot-circle-o"
-                    uncheckedIcon="circle-o"
-                    checked={blood}
-                    onPress={() => {
-                        setBlood(true);
-                        setPlatelets(false);
-                    }}
-                />
-                <CheckBox
-                    title="Platelets"
-                    center
-                    checkedIcon="dot-circle-o"
-                    uncheckedIcon="circle-o"
-                    checked={platelets}
-                    onPress={() => {
-                        setBlood(false);
-                        setPlatelets(true);
-                    }}
-                />
-            </View>
-            <Dropdown
-                style1={{marginBottom: 15}}
-                style2={{width: '100%'}}
-                state={bloodGrp}
-                onChangeValue={value => {
-                    setBloodGrp(value);
-                }}
-                myData={data}
-            />
-            <Text style={styles.textStyle}>Blood Units Required</Text>
-            <TextInput 
-                placeholder='Blood Units'
-                placeholderTextColor="black"
-                style={styles.inputStyle}
-            />
-
-            <Text style={styles.textStyle}>Required Upto</Text>
-
-            <Button
-                label='Till Tomorrow'
-                highlightedButton={highlightedButton}
-                index={1}
-                onPress={(index) => {
-                    setHighlightedButton(index);
-                }}
-                clearHighlight={clearHighlight}
-            />
-
-            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <View style={{width: '49%'}}>
-                    <Button
-                        label={getCurrentDate(2)}
-                        highlightedButton={highlightedButton}
-                        index={2}
-                        onPress={(index) => {
-                            setHighlightedButton(index);
+        <ScrollView 
+            style={styles.container}
+            showsVerticalScrollIndicator={false}
+        >
+            <View style={{
+                    shadowColor: 'black',
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.8,
+                    shadowRadius: 2,
+                    elevation: 1, 
+                    padding: 20,
+                    borderRadius: 1
+            }}>
+                <Text style={{ color: 'rgb(105,105,105)', fontSize:14}}>Type</Text>
+                <View style={styles.type}>
+                    <CheckBox
+                        title="Blood"
+                        center
+                        checkedIcon="dot-circle-o"
+                        uncheckedIcon="circle-o"
+                        checked={blood}
+                        onPress={() => {
+                            setBlood(true);
+                            setPlatelets(false);
                         }}
-                        clearHighlight={clearHighlight}
                     />
+                    <CheckBox
+                        title="Platelets"
+                        center
+                        checkedIcon="dot-circle-o"
+                        uncheckedIcon="circle-o"
+                        checked={platelets}
+                        onPress={() => {
+                            setBlood(false);
+                            setPlatelets(true);
+                        }}
+                    />
+                </View>
+                <Dropdown
+                    style1={{marginBottom: 15, fontSize: 14}}
+                    style2={{width: '100%'}}
+                    state={bloodGrp}
+                    onChangeValue={value => {
+                        setBloodGrp(value);
+                    }}
+                    myData={data}
+                />
+                <Text style={styles.textStyle}>Blood Units Required</Text>
+                <TextInput 
+                    placeholder='Blood Units'
+                    placeholderTextColor="black"
+                    style={styles.inputStyle}
+                    keyboardType='number-pad'
+                />
+
+                <Text style={styles.textStyle}>Required Upto</Text>
+
+                <Button
+                    label='Till Tomorrow'
+                    highlightedButton={highlightedButton}
+                    index={1}
+                    onPress={(index, label) => {
+                        setHighlightedButton(index);
+                        setHighlightedLabel(label);
+                    }}
+                    clearHighlight={clearHighlight}
+                />
+
+                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <View style={{width: '49%'}}>
+                        <Button
+                            label={getCurrentDate(2)}
+                            highlightedButton={highlightedButton}
+                            index={2}
+                            onPress={(index, label) => {
+                                setHighlightedButton(index);
+                                setHighlightedLabel(label);
+                            }}
+                            clearHighlight={clearHighlight}
+                        />
+                    </View>
+                    
+                    <View style={{width: '49%'}}>
+                        <Button
+                            label={getCurrentDate(3)}
+                            highlightedButton={highlightedButton}
+                            index={3}
+                            onPress={(index, label) => {
+                                setHighlightedButton(index);
+                                setHighlightedLabel(label);
+                            }}
+                            clearHighlight={clearHighlight}
+                        />
+                    </View>
                 </View>
                 
-                <View style={{width: '49%'}}>
-                    <Button
-                        label={getCurrentDate(3)}
-                        highlightedButton={highlightedButton}
-                        index={3}
-                        onPress={(index) => {
-                            setHighlightedButton(index);
-                        }}
-                        clearHighlight={clearHighlight}
+                <Text style={styles.textStyle}>Your request will close on this date.</Text>
+
+                <View 
+                    style={{flexDirection: 'row',
+                    backgroundColor: 'rgb(236,236,236)',
+                    borderRadius: 5
+                    }}     
+                >
+                    <Text style={{borderRightWidth: 1, borderRightColor: 'black', padding: 10, fontWeight: 'bold'}}>Live Till </Text>
+                    {highlightedLabel && <Text style={{padding: 10, fontSize: 15}}>{highlightedLabel}</Text>}
+                </View>
+            </View>
+            
+            <View style={{
+                    shadowColor: 'black',
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.8,
+                    shadowRadius: 2,
+                    elevation: 1, 
+                    padding: 15,
+                    borderRadius: 1,
+                    marginTop: 20
+            }}>
+                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <View style={{width: '49%'}}>    
+                        <Text style={{color: 'rgb(105,105,105)', fontSize:14, marginVertical: 3}}>First Name</Text>
+                        <TextInput 
+                            style={styles.inputStyle}
+                        />
+                    </View>
+
+                    <View style={{width: '49%'}}>
+                        <Text style={{color: 'rgb(105,105,105)', fontSize:14, marginVertical: 3}}>Last Name</Text>
+                        <TextInput 
+                            style={[styles.inputStyle, {marginBottom: 10}]}
+                        />
+                    </View>
+                </View>
+
+                <Text style={{color: 'rgb(105,105,105)', fontSize:14, marginVertical: 3}}>Contact Number</Text>
+
+                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <View style={{
+                        flexDirection: 'row', width: '25%', 
+                        padding: 5,
+                        backgroundColor: 'rgb(236,236,236)',
+                        justifyContent: 'space-around',
+                        alignItems: 'center',
+                        borderRadius: 5
+                    }}>
+                        <Image
+                            source={require('../../assets/Nepal.png')}
+                            style={{
+                                width: 20,
+                                height: 25
+                            }}
+                        />
+                        <Text style={{fontWeight: 'bold'}}>+977</Text>
+                    </View>
+
+                    <TextInput 
+                        style={[styles.inputStyle, {width: '73%'}]}
+                        keyboardType='number-pad'
                     />
                 </View>
             </View>
+
+            <View style={{
+                    shadowColor: 'black',
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.8,
+                    shadowRadius: 2,
+                    elevation: 1, 
+                    padding: 15,
+                    borderRadius: 1,
+                    marginTop: 20
+            }}>
+                <Text 
+                    style={{color: 'rgb(105,105,105)',
+                    fontSize:14}}
+                >
+                    Hospital name and address will help blood donors to navigate easily
+                </Text>
+
+                <Text style={styles.textStyle}>Near by Hospital Name</Text>
+                <TextInput 
+                    style={styles.inputStyle}
+                />
+            </View>
+
 
             <ButtonComponent 
                 text="Submit"
                 onSubmit={handleSubmit}
             />
-
-            <FlatList
-                data={userInfo}
-                keyExtractor={item => item.uid}
-                renderItem={({item}) => {
-                    return <UserPopup name={item.name} distance={item.distance} token={item.token}/>
-                }}
-                showsVerticalScrollIndicator={false}
-            />
-        </View>
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         marginTop: 10,
-        marginHorizontal: 30,
-        flex: 1
+        marginHorizontal: 20,
+        flex: 1,
     },
     dropdown: {
         width: '100%'
     },
     inputStyle: {
-        backgroundColor: 'rgb(220,220,220)',
+        backgroundColor: 'rgb(236,236,236)',
         paddingHorizontal: 10,
         paddingVertical: 2,
         borderRadius: 5
@@ -243,10 +345,10 @@ const styles = StyleSheet.create({
         borderRadius: 20,
     },
     textStyle: {
-        marginTop: 30,
+        marginTop: 20,
         color: 'rgb(105,105,105)',
         marginBottom: 15,
-        fontSize:15
+        fontSize:14
     },
     btnNormal: {
         borderColor: 'rgb(105,105,105)',

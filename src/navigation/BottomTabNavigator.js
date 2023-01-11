@@ -23,9 +23,9 @@ const BottomTab = () => {
                 } else if (rn === 'Request Blood') {
                   iconName = focused ? 'water' : 'water-outline'
                 } else if (rn === 'Request List') {
-                  iconName = focused ? 'list-outline' : 'list-sharp'
+                  iconName = focused ? 'list-sharp' : 'list-outline'
                 }
-                return <Ionicons name={iconName} size={size} color='rgb(206,38,1)' />
+                return <Ionicons name={iconName} size={size} color='rgb(178,34,34)' />
             },
             headerShown: false,
           })}
